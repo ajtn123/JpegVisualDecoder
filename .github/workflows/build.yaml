@@ -1,0 +1,37 @@
+name: Build & Release .NET App
+
+on:
+  push:
+    branches: ['master']
+
+permissions:
+  contents: write
+
+jobs:
+  build-release:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Publish
+        run: dotnet publish -c Release -r win-x64 -p:PublishAot=true
+
+      - name: Archive
+        shell: bash
+        run: 7z a "${{ github.event.repository.name }}-${{ github.ref_name }}-win-x64.7z" bin/Release/net10.0/win-x64/publish
+
+      - name: Update Tag
+        run: |
+          git tag -f alpha
+          git push origin refs/tags/alpha --force
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: alpha
+          prerelease: true
+          overwrite_files: true
+          files: ./*.7z
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

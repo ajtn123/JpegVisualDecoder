@@ -25,6 +25,7 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
+    [System.Diagnostics.CodeAnalysis.UnconditionalSuppressMessage("Trimming", "IL2026")]
     private static void DisableAvaloniaDataAnnotationValidation()
     {
         // Get an array of plugins to remove

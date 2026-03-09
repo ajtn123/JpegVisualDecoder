@@ -20,14 +20,13 @@ public partial class Decoder
     private int imageDataEnd = default;
 
     private int restartInterval = default;
-    private List<int> restarts = [];
+    private readonly List<int> restarts = [];
 
-    private double[,] CosineLUT = new double[8, 8];
+    private readonly double[,] CosineLUT = new double[8, 8];
     private bool IsLutInit = false;
 
-    private byte[] imageData;
-    private int[] previousDC;
-    private Dictionary<int, int> compIndexMap;
+    private int[] previousDC = [];
+    private Dictionary<int, int> compIndexMap = [];
 
     public static readonly int[] ZigZag = [
          0,  1,  8, 16,  9,  2,  3, 10,
