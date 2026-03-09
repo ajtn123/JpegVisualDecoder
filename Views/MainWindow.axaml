@@ -6,8 +6,8 @@
         mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
         x:Class="JpegVisualDecoder.Views.MainWindow"
         x:DataType="vm:MainWindowViewModel"
-        Icon="/Assets/avalonia-logo.ico"
-        Title="JpegVisualDecoder">
+        Icon="/Assets/logo.ico"
+        Title="{Binding Path}">
 
     <Design.DataContext>
         <vm:MainWindowViewModel/>
