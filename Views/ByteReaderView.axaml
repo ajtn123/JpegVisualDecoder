@@ -7,7 +7,8 @@
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="JpegVisualDecoder.Views.ByteReaderView">
     <Grid ColumnDefinitions="10,*">
-        <ProgressBar Orientation="Vertical" FlowDirection="RightToLeft" VerticalAlignment="Stretch" Value="{Binding Chunk}" Maximum="{Binding ChunkTotal}">
+        <ProgressBar Orientation="Vertical" VerticalAlignment="Stretch" CornerRadius="0"
+                     Value="{Binding Chunk}" Maximum="{Binding ChunkTotal}">
 			<ProgressBar.RenderTransform>
                 <RotateTransform Angle="180"/>
             </ProgressBar.RenderTransform>
@@ -20,8 +21,11 @@
                 </ItemsPanelTemplate>
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <TextBlock Text="{Binding}"/>
+                <DataTemplate DataType="vm:ByteViewModel">
+                    <TextBlock Background="{Binding Background}">
+						<Run Text="{Binding High}"/>
+						<Run Text="{Binding Low}"/>
+                    </TextBlock>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

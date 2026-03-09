@@ -7,6 +7,7 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
 {
     private readonly ByteReader reader = brvm.ByteReader;
     private void Log(string category, object message) => logger.Log(reader.position, category, message.ToString() ?? "Null");
+
     public async Task DefineMarkers()
     {
         while (reader.position < reader.data.Length)
@@ -84,7 +85,7 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                 RenderMCU(mcuData, mcuX, mcuY, maxH, maxV);
                 mcuCount++;
 
-                brvm.Refresh();
+                brvm.Refresh(false);
             }
         }
 

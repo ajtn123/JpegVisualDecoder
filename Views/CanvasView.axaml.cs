@@ -11,11 +11,12 @@ public partial class CanvasView : UserControl
         Loaded += async (_, _) =>
         {
             var vm = (CanvasViewModel)DataContext!;
-            PeriodicTimer timer = new(TimeSpan.FromMilliseconds(100));
+            PeriodicTimer timer = new(TimeSpan.FromMilliseconds(200));
             while (await timer.WaitForNextTickAsync() && !vm.finished)
-            {
                 Img.InvalidateVisual();
-            }
+
+            Img.InvalidateVisual();
+            timer.Dispose();
         };
     }
 }

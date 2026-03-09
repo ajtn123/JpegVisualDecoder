@@ -103,6 +103,7 @@ public partial class Decoder
     {
         Log("Marker", "Start Of Scan");
         var length = reader.ReadWord();
+        imageDataStart = reader.position + length - 2;
         Log("Length", length);
         var payload = reader.ReadBytes(length - 2);
         componentMap = new ComponentSelector[payload[0]];
@@ -119,8 +120,6 @@ public partial class Decoder
         spectralSelectorStart = payload[specOffset];
         spectralSelectorEnd = payload[specOffset + 1];
         successiveApprox = payload[specOffset + 2];
-
-        imageDataStart = reader.position + length - 2;
     }
 
     private void Restart(int n)
