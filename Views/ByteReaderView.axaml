@@ -22,10 +22,7 @@
             </ItemsControl.ItemsPanel>
             <ItemsControl.ItemTemplate>
                 <DataTemplate DataType="vm:ByteViewModel">
-                    <TextBlock Background="{Binding Background}">
-						<Run Text="{Binding High}"/>
-						<Run Text="{Binding Low}"/>
-                    </TextBlock>
+                    <TextBlock Background="{Binding Background}"><Run Text="{Binding High}"/><Run Text="{Binding Low}"/></TextBlock>
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>

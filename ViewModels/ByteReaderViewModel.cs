@@ -7,7 +7,7 @@ namespace JpegVisualDecoder.ViewModels;
 
 public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
 {
-    public const int COLUMNS = 16;
+    public const int COLUMNS = 32;
     public const int ROWS = 32;
     public const int SIZE = COLUMNS * ROWS;
 
