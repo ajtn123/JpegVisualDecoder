@@ -12,7 +12,7 @@ public partial class CanvasView : UserControl
         {
             var vm = (CanvasViewModel)DataContext!;
             PeriodicTimer timer = new(TimeSpan.FromMilliseconds(200));
-            while (await timer.WaitForNextTickAsync() && !vm.finished)
+            while (await timer.WaitForNextTickAsync() && !vm.frozen)
                 Img.InvalidateVisual();
 
             Img.InvalidateVisual();

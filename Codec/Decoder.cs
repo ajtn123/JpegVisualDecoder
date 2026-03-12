@@ -93,6 +93,9 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
         brvm.ByteReader.position = brvm.ByteReader.data.Length - 1;
         brvm.Refresh(true);
 
-        canvas.Final.finished = true;
+        canvas.Cb.frozen = true;
+        canvas.Cr.frozen = true;
+        canvas.Y.frozen = true;
+        canvas.Final.frozen = true;
     }
 }

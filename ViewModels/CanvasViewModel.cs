@@ -18,5 +18,5 @@ public partial class CanvasViewModel(int width, int height) : ViewModelBase
         Marshal.Copy([r, g, b, byte.MaxValue], 0, buffer.Address + 4 * ((width * y) + x), 4);
     }
 
-    public bool finished;
+    public bool frozen;
 }

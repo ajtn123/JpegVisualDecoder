@@ -14,5 +14,10 @@ namespace JpegVisualDecoder.Views
         {
             DataContext = new MainWindowViewModel((App.Current!.ApplicationLifetime as ClassicDesktopStyleApplicationLifetime)!.Args![0]);
         }
+
+        private void Button_Tapped_1(object? sender, Avalonia.Input.TappedEventArgs e)
+        {
+            new AboutWindow().Show();
+        }
     }
 }

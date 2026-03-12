@@ -18,7 +18,10 @@
         <ContentControl Content="{Binding LoggerViewModel}" Grid.Row="1"/>
         <ContentControl Content="{Binding CompositeCanvasViewModel}" Grid.Column="1" Grid.RowSpan="2"/>
 
-        <Button Content="Restart" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Tapped="Button_Tapped"/>
+        <StackPanel Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Orientation="Horizontal">
+            <Button Content="Restart" Tapped="Button_Tapped"/>
+            <Button Content="About" Tapped="Button_Tapped_1"/>
+        </StackPanel>
     </Grid>
 
 </Window>

@@ -1,0 +1,246 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+        x:Class="JpegVisualDecoder.Views.AboutWindow"
+        Title="AboutWindow">
+    <ScrollViewer>
+        <StackPanel Margin="24" Spacing="20">
+
+            <!-- Title -->
+            <TextBlock Text="JPEG Decoding Process"
+                       FontSize="28"
+                       FontWeight="Bold"/>
+
+            <TextBlock TextWrapping="Wrap">
+                JPEG decoding reconstructs an image from compressed data. The decoder
+                reverses the steps used during encoding, converting compressed frequency
+                data back into RGB pixel values that can be displayed on screen.
+            </TextBlock>
+
+
+            <!-- Pipeline Diagram -->
+            <Border Padding="16" Background="#222" CornerRadius="8">
+                <StackPanel Spacing="6">
+                    <TextBlock Text="Decoding Pipeline"
+                               FontWeight="Bold"
+                               Foreground="White"/>
+
+                    <TextBlock Foreground="White"
+                               Text="Huffman Decode → Run-Length Expand → Dequantize → IDCT → Color Conversion → RGB Pixels"/>
+                </StackPanel>
+            </Border>
+
+
+            <!-- Lossy vs Lossless -->
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="1. Lossless vs Lossy Compression"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        Image compression methods fall into two categories: lossless and lossy.
+                        Lossless compression preserves every bit of original information,
+                        allowing perfect reconstruction of the image.
+                    </TextBlock>
+
+                    <TextBlock TextWrapping="Wrap">
+                        JPEG uses lossy compression. Some visual information is discarded
+                        during encoding to significantly reduce file size. The decoded
+                        image is therefore an approximation of the original.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+
+            <!-- Encoding Symmetry -->
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="2. Encoding and Decoding Symmetry"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        The decoding process reverses the operations performed during
+                        encoding. Entropy decoding reverses Huffman coding, dequantization
+                        restores coefficient scales, and the inverse discrete cosine
+                        transform converts frequency data back into spatial pixels.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+
+            <!-- Run Length + Huffman -->
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="3. Run-Length and Huffman Encoding"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        After quantization, many high-frequency coefficients become zero.
+                        Run-length encoding compresses long sequences of zeros by storing
+                        their length instead of each individual value.
+                    </TextBlock>
+
+                    <TextBlock TextWrapping="Wrap">
+                        These symbols are then compressed using Huffman coding, which
+                        assigns shorter bit sequences to common symbols and longer
+                        sequences to rare ones.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+
+                    <TextBlock Text="Zig-Zag Scan"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        JPEG stores DCT coefficients using a zig-zag traversal so that
+                        low-frequency values appear first and long runs of zeros appear later.
+                    </TextBlock>
+
+                    <TextBlock FontFamily="Consolas"
+                               TextWrapping="Wrap">
+00 01 05 06 14 15 27 28 <LineBreak/>
+02 04 07 13 16 26 29 42 <LineBreak/>
+03 08 12 17 25 30 41 43 <LineBreak/>
+09 11 18 24 31 40 44 53 <LineBreak/>
+10 19 23 32 39 45 52 54 <LineBreak/>
+20 22 33 38 46 51 55 60 <LineBreak/>
+21 34 37 47 50 56 59 61 <LineBreak/>
+35 36 48 49 57 58 62 63 <LineBreak/>
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <!-- Compression Math -->
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="4. Compression Mathematics (DCT)"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        JPEG compression relies on the Discrete Cosine Transform (DCT).
+                        The transform converts an 8×8 pixel block into frequency
+                        coefficients representing image patterns.
+                    </TextBlock>
+
+                    <Border Background="#222" Padding="12" CornerRadius="6">
+                        <TextBlock Foreground="White"
+                                   FontFamily="Consolas"
+                                   TextWrapping="Wrap"
+                                   Text="F(u,v) = 1/4 * C(u)C(v) Σ Σ f(x,y) cos((2x+1)uπ/16) cos((2y+1)vπ/16)"/>
+                    </Border>
+
+                    <TextBlock TextWrapping="Wrap">
+                        Low-frequency components describe smooth color transitions,
+                        while high-frequency components represent fine details.
+                        JPEG aggressively compresses high frequencies because
+                        they are less noticeable to human vision.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+
+                    <TextBlock Text="DCT 8×8 Block"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        JPEG divides the image into 8×8 pixel blocks. Each block is transformed
+                        into frequency coefficients using the Discrete Cosine Transform.
+                    </TextBlock>
+
+                    <UniformGrid Rows="8" Columns="8" HorizontalAlignment="Center" Loaded="UniformGrid_Loaded"/>
+
+                </StackPanel>
+            </Border>
+
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+
+                    <TextBlock Text="Quantization"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        Each DCT coefficient is divided by a value in a quantization table.
+                        Larger divisors remove more detail but produce higher compression.
+                    </TextBlock>
+
+                    <Border Background="#222" Padding="10" CornerRadius="6">
+                        <TextBlock Foreground="White"
+                                   FontFamily="Consolas"
+                                   Text="Quantized = round(DCT / QTable)"/>
+                    </Border>
+
+                </StackPanel>
+            </Border>
+
+            <!-- Color Space -->
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="5. Color Space Conversion"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        JPEG stores images in the YCbCr color space rather than RGB.
+                        Y represents brightness, while Cb and Cr represent color
+                        differences.
+                    </TextBlock>
+
+                    <Border Background="#222" Padding="12" CornerRadius="6">
+                        <StackPanel>
+                            <TextBlock Foreground="White" FontFamily="Consolas"
+                                       Text="R = Y + 1.402(Cr - 128)"/>
+                            <TextBlock Foreground="White" FontFamily="Consolas"
+                                       Text="G = Y - 0.344136(Cb - 128) - 0.714136(Cr - 128)"/>
+                            <TextBlock Foreground="White" FontFamily="Consolas"
+                                       Text="B = Y + 1.772(Cb - 128)"/>
+                        </StackPanel>
+                    </Border>
+
+                    <TextBlock TextWrapping="Wrap">
+                        During decoding, YCbCr values are converted back into RGB
+                        pixels so the image can be displayed on a screen.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+
+                    <TextBlock Text="YCbCr to RGB"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+
+                        <Border Background="#888888" Width="40" Height="40"/>
+                        <Border Background="#88aaff" Width="40" Height="40"/>
+                        <Border Background="#ff8888" Width="40" Height="40"/>
+
+                        <TextBlock VerticalAlignment="Center"
+                                   Text="→"/>
+
+                        <Border Background="Red" Width="40" Height="40"/>
+                        <Border Background="Green" Width="40" Height="40"/>
+                        <Border Background="Blue" Width="40" Height="40"/>
+
+                    </StackPanel>
+
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Window>
