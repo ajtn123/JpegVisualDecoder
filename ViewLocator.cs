@@ -11,6 +11,7 @@ public class ViewLocator : IDataTemplate
         ByteReaderViewModel => new ByteReaderView(),
         LoggerViewModel => new LoggerView(),
         CanvasViewModel => new CanvasView(),
+        CompositeCanvasViewModel => new CompositeCanvasView(),
         _ => new TextBlock { Text = param.ToString() },
     };
 

@@ -1,26 +1,19 @@
 ﻿using Avalonia.Media.Imaging;
-using CommunityToolkit.Mvvm.ComponentModel;
-using System.ComponentModel;
+using Avalonia.Platform;
 using System.Runtime.InteropServices;
 
 namespace JpegVisualDecoder.ViewModels;
 
-public partial class CanvasViewModel : ViewModelBase
+public partial class CanvasViewModel(int width, int height) : ViewModelBase
 {
-    [ObservableProperty] public partial WriteableBitmap? Bitmap { get; set; }
+    public WriteableBitmap Bitmap { get; } = new WriteableBitmap(new PixelSize(width, height), new Vector(96, 96), PixelFormat.Rgba8888, AlphaFormat.Opaque);
 
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
+    public void SetPixel(int x, int y, byte l)
+        => SetPixel(x, y, l, l, l);
 
-        if (Bitmap != null)
-            width = Convert.ToInt32(Bitmap.Size.Width);
-    }
-
-    private int width;
     public void SetPixel(int x, int y, byte r, byte g, byte b)
     {
-        using var buffer = Bitmap!.Lock();
+        using var buffer = Bitmap.Lock();
 
         Marshal.Copy([r, g, b, byte.MaxValue], 0, buffer.Address + 4 * ((width * y) + x), 4);
     }

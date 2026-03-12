@@ -2,7 +2,7 @@
   "profiles": {
     "JpegVisualDecoder": {
       "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\chenf\\Pictures\\Pixiv\\[13777815] 憂 ゅﾚ) 梓.jpg\""
+      "commandLineArgs": "\"C:\\Users\\chenf\\source\\TestMaterial\\bike-d-c-0.5.jpg\""
     }
   }
 }

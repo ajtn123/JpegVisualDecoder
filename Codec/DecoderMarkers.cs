@@ -11,7 +11,7 @@ public partial class Decoder
     {
         Log("Marker", "Start of Frame (Baseline)");
         var length = reader.ReadWord();
-        Log("Length", length);
+        Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
         precision = payload[0];
         height = (payload[1] << 8) | payload[2];
@@ -27,10 +27,10 @@ public partial class Decoder
             components[i] = new(id, x, y, table);
         }
 
-        Log("Precision", precision);
-        Log("Line Nb", height);
-        Log("Samples", width);
-        Log("Components", components.Length);
+        Log("| Precision", precision);
+        Log("| Line Nb", height);
+        Log("| Samples", width);
+        Log("| Components", components.Length);
     }
 
     private void StartOfFrameProgressive()
@@ -43,12 +43,12 @@ public partial class Decoder
     {
         Log("Marker", "Define Huffman Table");
         var length = reader.ReadWord();
-        Log("Length", length);
+        Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
         var TcTh = payload[0];
         var Tc = TcTh >> 4;
         var Th = TcTh & 0x0F;
-        Log("Type", $"{Th switch { 0 => "Luminance", 1 => "Chrominance", _ => Th }} {Tc switch { 0 => "DC", 1 => "AC", _ => Tc }}");
+        Log("| Type", $"{Th switch { 0 => "Luminance", 1 => "Chrominance", _ => Th }} {Tc switch { 0 => "DC", 1 => "AC", _ => Tc }}");
         var Li = payload[1..17];
 
         var table = new Dictionary<(ushort, byte), byte>();
@@ -70,7 +70,7 @@ public partial class Decoder
     {
         Log("Marker", "Define Quantization Table");
         var length = reader.ReadWord();
-        Log("Length", length);
+        Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
 
         int i = 0;
@@ -94,9 +94,9 @@ public partial class Decoder
     {
         Log("Marker", "Define Restart Interval");
         var length = reader.ReadWord();
-        Log("Length", length);
+        Log("| Length", length);
         restartInterval = reader.ReadWord();
-        Log("Restart Interval", restartInterval);
+        Log("| Restart Interval", restartInterval);
     }
 
     private void StartOfScan()
@@ -104,7 +104,7 @@ public partial class Decoder
         Log("Marker", "Start Of Scan");
         var length = reader.ReadWord();
         imageDataStart = reader.position + length - 2;
-        Log("Length", length);
+        Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
         componentMap = new ComponentSelector[payload[0]];
         for (int i = 0; i < componentMap.Length; i++)
@@ -143,5 +143,9 @@ public partial class Decoder
         Log("Marker", "End of Image");
 
         imageDataEnd = reader.position - 2;
+
+        Log("Meta", $"Entropy date length: {imageDataEnd - imageDataStart} bytes");
+        Log("Meta", $"Image width: {width} pixels");
+        Log("Meta", $"Image height: {height} pixels");
     }
 }

@@ -135,7 +135,7 @@ public partial class Decoder
     }
 
     // Example for one pixel:
-    private void YCbCrToRGB(double y, double cb, double cr, out byte r, out byte g, out byte b)
+    private static void YCbCrToRGB(double y, double cb, double cr, out byte r, out byte g, out byte b)
     {
         r = Clamp((int)(y + 1.402 * (cr - 128)));
         g = Clamp((int)(y - 0.344136 * (cb - 128) - 0.714136 * (cr - 128)));
@@ -169,12 +169,17 @@ public partial class Decoder
                 int xx = mcuX + px;
                 int yy = mcuY + py;
                 if (xx < width && yy < height)
-                    canvas.SetPixel(xx, yy, r, g, b);
+                {
+                    canvas.Cb!.SetPixel(xx, yy, Convert.ToByte(double.Clamp(cb, 0, 255)));
+                    canvas.Cr!.SetPixel(xx, yy, Convert.ToByte(double.Clamp(cr, 0, 255)));
+                    canvas.Y!.SetPixel(xx, yy, Convert.ToByte(double.Clamp(y, 0, 255)));
+                    canvas.Final!.SetPixel(xx, yy, r, g, b);
+                }
             }
         }
     }
 
-    private double GetPixelFromMCU(double[][] blocks, int px, int py, int hFact, int vFact, int maxH, int maxV)
+    private static double GetPixelFromMCU(double[][] blocks, int px, int py, int hFact, int vFact, int maxH, int maxV)
     {
         // For subsampled components, we need to scale down the pixel coordinates
         // Example: if maxH=2, hFact=1, then we read every other pixel

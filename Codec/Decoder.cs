@@ -1,9 +1,6 @@
-﻿using Avalonia.Media.Imaging;
-using Avalonia.Platform;
+﻿namespace JpegVisualDecoder.Codec;
 
-namespace JpegVisualDecoder.Codec;
-
-public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, CanvasViewModel canvas)
+public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, CompositeCanvasViewModel canvas)
 {
     private readonly ByteReader reader = brvm.ByteReader;
     private void Log(string category, object message) => logger.Log(reader.position, category, message.ToString() ?? "Null");
@@ -41,7 +38,10 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
 
     public async Task DecodePixels()
     {
-        canvas.Bitmap = new WriteableBitmap(new PixelSize(width, height), new Vector(96, 96), PixelFormat.Rgba8888, AlphaFormat.Opaque);
+        canvas.Cb = new(width, height);
+        canvas.Cr = new(width, height);
+        canvas.Y = new(width, height);
+        canvas.Final = new(width, height);
 
         // imageData = reader.data[imageDataStart..imageDataEnd];
         previousDC = new int[components.Length];
@@ -86,9 +86,10 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                 mcuCount++;
 
                 brvm.Refresh(false);
+                await Task.Delay(10);
             }
         }
 
-        canvas.finished = true;
+        canvas.Final.finished = true;
     }
 }

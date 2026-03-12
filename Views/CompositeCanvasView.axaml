@@ -1,0 +1,28 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:vm="using:JpegVisualDecoder.ViewModels"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:DataType="vm:CompositeCanvasViewModel"
+             x:Class="JpegVisualDecoder.Views.CompositeCanvasView">
+    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+        <Grid.Styles>
+			<Style Selector="TextBlock">
+				<Setter Property="HorizontalAlignment" Value="Center"/>
+				<Setter Property="Background" Value="#BFFF"/>
+				<Setter Property="ZIndex" Value="1"/>
+            </Style>
+        </Grid.Styles>
+
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Top">Cb</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">Cr</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom">Y</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom">Final</TextBlock>
+
+		<ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding Cb}"/>
+		<ContentControl Grid.Row="0" Grid.Column="1" Content="{Binding Cr}"/>
+		<ContentControl Grid.Row="1" Grid.Column="0" Content="{Binding Y}"/>
+		<ContentControl Grid.Row="1" Grid.Column="1" Content="{Binding Final}"/>
+    </Grid>
+</UserControl>

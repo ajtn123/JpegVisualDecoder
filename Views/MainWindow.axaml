@@ -16,7 +16,9 @@
     <Grid ColumnDefinitions="*,*" RowDefinitions="3*,*">
         <ContentControl Content="{Binding ByteReaderViewModel}"/>
         <ContentControl Content="{Binding LoggerViewModel}" Grid.Row="1"/>
-        <ContentControl Content="{Binding CanvasViewModel}" Grid.Column="1" Grid.RowSpan="2"/>
+        <ContentControl Content="{Binding CompositeCanvasViewModel}" Grid.Column="1" Grid.RowSpan="2"/>
+
+        <Button Content="Restart" Grid.Column="1" VerticalAlignment="Top" HorizontalAlignment="Right" Tapped="Button_Tapped"/>
     </Grid>
 
 </Window>
