@@ -16,7 +16,7 @@ public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
 
     public ByteReader ByteReader { get; init; } = reader;
 
-    public int ChunkTotal { get; set; } = reader.data.Length / SIZE + 1;
+    public int ChunkTotal { get; set; } = reader.data.Length / SIZE;
 
     public ByteViewModel[] HexChunk { get; } = GetFilledArray<ByteViewModel>(SIZE);
 
@@ -46,11 +46,24 @@ public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
                     HexChunk[i].SetValue(value);
                     HexChunk[i].SetBackground(ByteViewModel.Color.Transparent);
                 }
+                else HexChunk[i].ClearValue();
             }
         }
 
         if (pointer)
             HexChunk[positionInChunk].SetBackground(ByteViewModel.Color.Blue);
+    }
+
+    public void MarkRange(int start, int end)
+    {
+        var chunkStart = Chunk * SIZE;
+        var chunkEnd = chunkStart + SIZE;
+        start = int.Clamp(start, chunkStart, chunkEnd);
+        end = int.Clamp(end, chunkStart, chunkEnd);
+
+        if (end >= start)
+            for (int i = start; i <= end; i++)
+                HexChunk[i - start].SetBackground(ByteViewModel.Color.Red);
     }
 
     private static T[] GetFilledArray<T>(int size) where T : class, new()
@@ -92,6 +105,12 @@ public partial class ByteViewModel : ViewModelBase
             15 => 'F',
             _ => throw new InvalidOperationException(),
         };
+    }
+
+    public void ClearValue()
+    {
+        High = Low = ' ';
+        SetBackground(Color.Transparent);
     }
 
     [ObservableProperty] public partial ImmutableSolidColorBrush Background { get; private set; }

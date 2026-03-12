@@ -14,9 +14,6 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                 var marker = reader.ReadByte();
                 if (marker == 0x00) continue;
 
-                brvm.Refresh();
-                await Task.Delay(500);
-
                 switch (marker)
                 {
                     case 0xD8: StartOfImage(); break;
@@ -32,6 +29,9 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                     case 0xD9: EndOfImage(); break;
                     default: Log("Marker", $"Unknown (0x{marker:X2})"); break;
                 }
+
+                brvm.Refresh();
+                await Task.Delay(1000);
             }
         }
     }
@@ -89,6 +89,9 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                 await Task.Delay(10);
             }
         }
+
+        brvm.ByteReader.position = brvm.ByteReader.data.Length - 1;
+        brvm.Refresh(true);
 
         canvas.Final.finished = true;
     }

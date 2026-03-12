@@ -13,6 +13,7 @@ public partial class Decoder
         var length = reader.ReadWord();
         Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
+        brvm.MarkRange(reader.position - length, reader.position);
         precision = payload[0];
         height = (payload[1] << 8) | payload[2];
         width = (payload[3] << 8) | payload[4];
@@ -45,6 +46,7 @@ public partial class Decoder
         var length = reader.ReadWord();
         Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
+        brvm.MarkRange(reader.position - length, reader.position);
         var TcTh = payload[0];
         var Tc = TcTh >> 4;
         var Th = TcTh & 0x0F;
@@ -72,6 +74,7 @@ public partial class Decoder
         var length = reader.ReadWord();
         Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
+        brvm.MarkRange(reader.position - length, reader.position);
 
         int i = 0;
         while (i < payload.Length)
@@ -106,6 +109,7 @@ public partial class Decoder
         imageDataStart = reader.position + length - 2;
         Log("| Length", length);
         var payload = reader.ReadBytes(length - 2);
+        brvm.MarkRange(reader.position - length, reader.position);
         componentMap = new ComponentSelector[payload[0]];
         for (int i = 0; i < componentMap.Length; i++)
         {
