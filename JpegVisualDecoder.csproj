@@ -19,6 +19,9 @@
     <ItemGroup>
         <Folder Include="Models\" />
         <AvaloniaResource Include="Assets\**" />
+        <Content Include="bike-d-c-0.5.jpg">
+            <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+        </Content>
     </ItemGroup>
 
     <ItemGroup>

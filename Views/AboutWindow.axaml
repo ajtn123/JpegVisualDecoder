@@ -93,32 +93,6 @@
                 </StackPanel>
             </Border>
 
-            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
-                <StackPanel Spacing="8">
-
-                    <TextBlock Text="Zig-Zag Scan"
-                               FontSize="18"
-                               FontWeight="Bold"/>
-
-                    <TextBlock TextWrapping="Wrap">
-                        JPEG stores DCT coefficients using a zig-zag traversal so that
-                        low-frequency values appear first and long runs of zeros appear later.
-                    </TextBlock>
-
-                    <TextBlock FontFamily="Consolas"
-                               TextWrapping="Wrap">
-00 01 05 06 14 15 27 28 <LineBreak/>
-02 04 07 13 16 26 29 42 <LineBreak/>
-03 08 12 17 25 30 41 43 <LineBreak/>
-09 11 18 24 31 40 44 53 <LineBreak/>
-10 19 23 32 39 45 52 54 <LineBreak/>
-20 22 33 38 46 51 55 60 <LineBreak/>
-21 34 37 47 50 56 59 61 <LineBreak/>
-35 36 48 49 57 58 62 63 <LineBreak/>
-                    </TextBlock>
-                </StackPanel>
-            </Border>
-
             <!-- Compression Math -->
             <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
                 <StackPanel Spacing="8">
@@ -144,6 +118,32 @@
                         while high-frequency components represent fine details.
                         JPEG aggressively compresses high frequencies because
                         they are less noticeable to human vision.
+                    </TextBlock>
+                </StackPanel>
+            </Border>
+
+            <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
+                <StackPanel Spacing="8">
+
+                    <TextBlock Text="Zig-Zag Scan"
+                               FontSize="18"
+                               FontWeight="Bold"/>
+
+                    <TextBlock TextWrapping="Wrap">
+                        JPEG stores DCT coefficients using a zig-zag traversal so that
+                        low-frequency values appear first and long runs of zeros appear later.
+                    </TextBlock>
+
+                    <TextBlock FontFamily="Consolas"
+                               TextWrapping="Wrap">
+00 01 05 06 14 15 27 28 <LineBreak/>
+02 04 07 13 16 26 29 42 <LineBreak/>
+03 08 12 17 25 30 41 43 <LineBreak/>
+09 11 18 24 31 40 44 53 <LineBreak/>
+10 19 23 32 39 45 52 54 <LineBreak/>
+20 22 33 38 46 51 55 60 <LineBreak/>
+21 34 37 47 50 56 59 61 <LineBreak/>
+35 36 48 49 57 58 62 63 <LineBreak/>
                     </TextBlock>
                 </StackPanel>
             </Border>

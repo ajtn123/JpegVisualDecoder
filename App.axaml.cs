@@ -18,7 +18,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(desktop.Args![0]),
+                DataContext = new MainWindowViewModel(desktop.Args!.Length > 0 ? desktop.Args[0] : @".\bike-d-c-0.5.jpg"),
             };
         }
 
