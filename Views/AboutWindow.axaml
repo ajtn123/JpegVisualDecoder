@@ -6,6 +6,8 @@
         x:Class="JpegVisualDecoder.Views.AboutWindow"
         Title="AboutWindow">
     <ScrollViewer>
+        <Grid ColumnDefinitions="*,*">
+
         <StackPanel Margin="24" Spacing="20">
 
             <!-- Title -->
@@ -148,6 +150,9 @@
                 </StackPanel>
             </Border>
 
+            </StackPanel>
+            <StackPanel Margin="24" Spacing="20" Grid.Column="1">
+
             <Border Padding="16" Background="#f4f4f4" CornerRadius="8">
                 <StackPanel Spacing="8">
 
@@ -242,5 +247,6 @@
                 </StackPanel>
             </Border>
         </StackPanel>
+        </Grid>
     </ScrollViewer>
 </Window>
