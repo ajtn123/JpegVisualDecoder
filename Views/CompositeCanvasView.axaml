@@ -15,10 +15,10 @@
             </Style>
         </Grid.Styles>
 
-        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Top">Cb (chroma/blue projection)</TextBlock>
-        <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">Cr (chroma/red projection)</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom">Y (luma)</TextBlock>
-        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom">RGB (image)</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="0" VerticalAlignment="Top">Cb (chroma/hue＆saturation/blue projection)</TextBlock>
+        <TextBlock Grid.Row="0" Grid.Column="1" VerticalAlignment="Top">Cr (chroma/hue＆saturation/red projection)</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="0" VerticalAlignment="Bottom">Y (luma/brightness)</TextBlock>
+        <TextBlock Grid.Row="1" Grid.Column="1" VerticalAlignment="Bottom">RGB (displayed image)</TextBlock>
 
 		<ContentControl Grid.Row="0" Grid.Column="0" Content="{Binding Cb}"/>
 		<ContentControl Grid.Row="0" Grid.Column="1" Content="{Binding Cr}"/>

@@ -6,6 +6,7 @@ public partial class MainWindowViewModel : ViewModelBase
 {
     public MainWindowViewModel(string? path)
     {
+        path = path?.Trim('"');
         if (!File.Exists(path))
             throw new FileNotFoundException();
 
