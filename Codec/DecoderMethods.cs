@@ -62,7 +62,7 @@ public partial class Decoder
         return output;
     }
 
-    private byte DecodeHuffman(ByteReader reader, Dictionary<(ushort, byte), byte> table)
+    private static byte DecodeHuffman(ByteReaderViewModel reader, Dictionary<(ushort, byte), byte> table)
     {
         ushort code = 0;
         for (byte length = 1; length <= 16; length++)
@@ -74,7 +74,7 @@ public partial class Decoder
         throw new Exception("Invalid Huffman code");
     }
 
-    private int ReceiveValue(ByteReader reader, int length)
+    private static int ReceiveValue(ByteReaderViewModel reader, int length)
     {
         if (length == 0) return 0;
         int val = reader.GetBits(length);
@@ -85,7 +85,7 @@ public partial class Decoder
         return val;
     }
 
-    private int[] DecodeBlock(ByteReader reader, ComponentSelector selector)
+    private int[] DecodeBlock(ByteReaderViewModel reader, ComponentSelector selector)
     {
         int[] block = new int[64];
 

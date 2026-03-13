@@ -10,10 +10,9 @@ public partial class Decoder
     private void StartOfFrameBaseline()
     {
         Log("Marker", "Start of Frame (Baseline)");
-        var length = reader.ReadWord();
+        var length = brvm.ReadWord();
         Log("| Length", length);
-        var payload = reader.ReadBytes(length - 2);
-        brvm.MarkRange(reader.position - length, reader.position);
+        var payload = brvm.ReadBytes(length - 2);
         precision = payload[0];
         height = (payload[1] << 8) | payload[2];
         width = (payload[3] << 8) | payload[4];
@@ -43,10 +42,9 @@ public partial class Decoder
     private void DefineHuffmanTable()
     {
         Log("Marker", "Define Huffman Table");
-        var length = reader.ReadWord();
+        var length = brvm.ReadWord();
         Log("| Length", length);
-        var payload = reader.ReadBytes(length - 2);
-        brvm.MarkRange(reader.position - length, reader.position);
+        var payload = brvm.ReadBytes(length - 2);
         var TcTh = payload[0];
         var Tc = TcTh >> 4;
         var Th = TcTh & 0x0F;
@@ -71,10 +69,9 @@ public partial class Decoder
     private void DefineQuantizationTable()
     {
         Log("Marker", "Define Quantization Table");
-        var length = reader.ReadWord();
+        var length = brvm.ReadWord();
         Log("| Length", length);
-        var payload = reader.ReadBytes(length - 2);
-        brvm.MarkRange(reader.position - length, reader.position);
+        var payload = brvm.ReadBytes(length - 2);
 
         int i = 0;
         while (i < payload.Length)
@@ -96,20 +93,19 @@ public partial class Decoder
     private void DefineRestartInterval()
     {
         Log("Marker", "Define Restart Interval");
-        var length = reader.ReadWord();
+        var length = brvm.ReadWord();
         Log("| Length", length);
-        restartInterval = reader.ReadWord();
+        restartInterval = brvm.ReadWord();
         Log("| Restart Interval", restartInterval);
     }
 
     private void StartOfScan()
     {
         Log("Marker", "Start Of Scan");
-        var length = reader.ReadWord();
-        imageDataStart = reader.position + length - 2;
+        var length = brvm.ReadWord();
+        imageDataStart = br.position + length - 2;
         Log("| Length", length);
-        var payload = reader.ReadBytes(length - 2);
-        brvm.MarkRange(reader.position - length, reader.position);
+        var payload = brvm.ReadBytes(length - 2);
         componentMap = new ComponentSelector[payload[0]];
         for (int i = 0; i < componentMap.Length; i++)
         {
@@ -129,7 +125,7 @@ public partial class Decoder
     private void Restart(int n)
     {
         Log("Marker", $"Restart {n}");
-        restarts.Add(reader.position - 2);
+        restarts.Add(br.position - 2);
     }
 
     private void Application(int n)
@@ -146,7 +142,7 @@ public partial class Decoder
     {
         Log("Marker", "End of Image");
 
-        imageDataEnd = reader.position - 2;
+        imageDataEnd = br.position - 2;
 
         Log("Meta", $"Entropy date length: {imageDataEnd - imageDataStart} bytes");
         Log("Meta", $"Image width: {width} pixels");

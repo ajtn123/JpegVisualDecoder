@@ -2,17 +2,20 @@
 
 public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, CompositeCanvasViewModel canvas)
 {
-    private readonly ByteReader reader = brvm.ByteReader;
-    private void Log(string category, object message) => logger.Log(reader.position, category, message.ToString() ?? "Null");
+    //private readonly ByteReader reader = brvm.Reader;
+    private readonly ByteReader br = brvm.Reader;
+    private void Log(string category, object message) => logger.Log(br.position, category, message.ToString() ?? "Null");
 
     public async Task DefineMarkers()
     {
-        while (reader.position < reader.data.Length)
+        while (br.position < br.data.Length)
         {
-            if (reader.ReadByte() == 0xFF)
+            if (brvm.ReadByte() == 0xFF)
             {
-                var marker = reader.ReadByte();
+                var marker = brvm.ReadByte();
                 if (marker == 0x00) continue;
+
+                brvm.AlternateColor();
 
                 switch (marker)
                 {
@@ -30,7 +33,6 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                     default: Log("Marker", $"Unknown (0x{marker:X2})"); break;
                 }
 
-                brvm.Refresh();
                 await Task.Delay(1000);
             }
         }
@@ -45,7 +47,7 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
 
         // imageData = reader.data[imageDataStart..imageDataEnd];
         previousDC = new int[components.Length];
-        brvm.ByteReader.position = imageDataStart;
+        br.position = imageDataStart;
         int maxH = components.Max(c => c.X);
         int maxV = components.Max(c => c.Y);
         compIndexMap = components.Select((c, i) => (c.Id, i)).ToDictionary(x => x.Id, x => x.i);
@@ -55,12 +57,14 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
         {
             for (int mcuX = 0; mcuX < width; mcuX += maxH * 8)
             {
+                brvm.AlternateColor();
+
                 if (restartInterval > 0 && mcuCount > 0 && mcuCount % restartInterval == 0)
                 {
-                    if (brvm.ByteReader.HitRestart)
+                    if (br.HitRestart)
                     {
                         Array.Clear(previousDC);
-                        brvm.ByteReader.ClearRestart();
+                        brvm.ClearRestart();
                     }
                     else
                         throw new Exception("Expected restart marker but none found");
@@ -75,7 +79,7 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
 
                     for (int i = 0; i < comp.Y * comp.X; i++)
                     {
-                        int[] raw = DecodeBlock(brvm.ByteReader, sel);
+                        int[] raw = DecodeBlock(brvm, sel);
                         blocks[i] = ComputeIDCT(raw);
                     }
 
@@ -85,13 +89,11 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                 RenderMCU(mcuData, mcuX, mcuY, maxH, maxV);
                 mcuCount++;
 
-                brvm.Refresh(false);
                 await Task.Delay(10);
             }
         }
 
-        brvm.ByteReader.position = brvm.ByteReader.data.Length - 1;
-        brvm.Refresh(true);
+        br.position = br.data.Length - 1;
 
         canvas.Cb.frozen = true;
         canvas.Cr.frozen = true;

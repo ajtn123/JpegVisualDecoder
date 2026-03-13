@@ -14,7 +14,7 @@ public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
     public int Columns { get; } = COLUMNS;
     public int Rows { get; } = ROWS;
 
-    public ByteReader ByteReader { get; init; } = reader;
+    private ByteReader ByteReader { get; init; } = reader;
 
     public int ChunkTotal { get; set; } = reader.data.Length / SIZE;
 
@@ -23,20 +23,14 @@ public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
     [ObservableProperty] public partial int Chunk { get; set; } = -1;
 
 
-    private int position = -1;
-    public void Refresh(bool pointer = true)
+    public void Refresh()
     {
-        if (position == ByteReader.position) return;
-        position = ByteReader.position;
-
-        var positionInChunk = position % SIZE;
-
-        var chunkIndex = position / SIZE;
+        var chunkIndex = ByteReader.position / SIZE;
         if (Chunk != chunkIndex)
         {
             Chunk = chunkIndex;
 
-            var start = position - positionInChunk;
+            var start = Chunk * SIZE;
             for (int i = 0; i < SIZE; i++)
             {
                 var cell = start + i;
@@ -49,13 +43,13 @@ public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
                 else HexChunk[i].ClearValue();
             }
         }
-
-        if (pointer)
-            HexChunk[positionInChunk].SetBackground(ByteViewModel.Color.Blue);
     }
 
     public void MarkRange(int start, int end)
     {
+        Refresh();
+        //if (Chunk < 0) return;
+
         var chunkStart = Chunk * SIZE;
         var chunkEnd = chunkStart + SIZE;
         start = int.Clamp(start, chunkStart, chunkEnd);
@@ -63,7 +57,7 @@ public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
 
         if (end >= start)
             for (int i = start; i <= end; i++)
-                HexChunk[i - start].SetBackground(ByteViewModel.Color.Red);
+                HexChunk[i - chunkStart].SetBackground((ByteViewModel.Color)color);
     }
 
     private static T[] GetFilledArray<T>(int size) where T : class, new()
@@ -72,6 +66,89 @@ public partial class ByteReaderViewModel(ByteReader reader) : ViewModelBase
         for (int i = 0; i < size; i++)
             array[i] = new T();
         return array;
+    }
+
+    public byte ReadByte()
+    {
+        MarkRange(ByteReader.position, ByteReader.position);
+        return ByteReader.ReadByte();
+    }
+
+    public byte[] ReadBytes(int length)
+    {
+        MarkRange(ByteReader.position, ByteReader.position + length);
+        return ByteReader.ReadBytes(length);
+    }
+
+    public int ReadWord()
+    {
+        MarkRange(ByteReader.position, ByteReader.position + 2);
+        return ByteReader.ReadWord();
+    }
+
+    public void ClearRestart() => ByteReader.ClearRestart();
+
+    public ByteReader Reader => ByteReader;
+
+
+    private int bitPosition = 8; // 0..7
+    private int current;
+
+    public int GetBit()
+    {
+        if (bitPosition == 8)
+        {
+            current = ReadEntropyByte();
+            bitPosition = 0;
+        }
+
+        int bit = (current >> (7 - bitPosition)) & 1;
+        bitPosition++;
+        return bit;
+    }
+    private int ReadEntropyByte()
+    {
+        MarkRange(ByteReader.position, ByteReader.position);
+
+        int b = Reader.data[Reader.position++];
+
+        if (b == 0xFF)
+        {
+            int next = Reader.data[Reader.position++];
+
+            // stuffed byte
+            if (next == 0x00)
+                return 0xFF;
+
+            // restart marker
+            if (next >= 0xD0 && next <= 0xD7)
+            {
+                Reader.HitRestart = true;
+                Reader.RestartMarker = next;
+                bitPosition = 8; // force byte alignment
+                return ReadEntropyByte(); // continue with next data byte
+            }
+
+            throw new Exception($"Marker {next:X2} inside entropy data");
+        }
+
+        return b;
+    }
+
+    public int GetBits(int n)
+    {
+        int v = 0;
+        for (int i = 0; i < n; i++)
+            v = (v << 1) | GetBit();
+        return v;
+    }
+
+    private int color = 1;
+    public void AlternateColor()
+    {
+        color += 1;
+        if (color > 3)
+            color = 1;
     }
 }
 
@@ -118,5 +195,5 @@ public partial class ByteViewModel : ViewModelBase
     public void SetBackground(Color color) => Background = brushes[(int)color];
 
     public enum Color { Transparent = 0, Red = 1, Green = 2, Blue = 3 }
-    private static readonly ImmutableSolidColorBrush[] brushes = [new(Colors.Transparent), new(Colors.LightPink), new(Colors.LightCyan), new(Colors.LightBlue)];
+    private static readonly ImmutableSolidColorBrush[] brushes = [new(Colors.Transparent), new(Colors.LightPink), new(Colors.LightGreen), new(Colors.LightBlue)];
 }
