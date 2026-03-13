@@ -12,13 +12,11 @@ public partial class MainWindowViewModel : ViewModelBase
         Path = path;
         ByteReaderViewModel = new(new(File.ReadAllBytes(path)));
         decoder = new(ByteReaderViewModel, LoggerViewModel, CompositeCanvasViewModel);
-
-        Task.Run(ST);
     }
 
     private readonly Decoder decoder;
 
-    public async Task ST()
+    public async Task Start()
     {
         await decoder.DefineMarkers();
         await decoder.DecodePixels();

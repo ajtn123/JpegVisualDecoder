@@ -15,8 +15,6 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                 var marker = brvm.ReadByte();
                 if (marker == 0x00) continue;
 
-                brvm.AlternateColor();
-
                 switch (marker)
                 {
                     case 0xD8: StartOfImage(); break;
@@ -32,6 +30,8 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                     case 0xD9: EndOfImage(); break;
                     default: Log("Marker", $"Unknown (0x{marker:X2})"); break;
                 }
+
+                brvm.AlternateColor();
 
                 await Task.Delay(1000);
             }
@@ -57,8 +57,6 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
         {
             for (int mcuX = 0; mcuX < width; mcuX += maxH * 8)
             {
-                brvm.AlternateColor();
-
                 if (restartInterval > 0 && mcuCount > 0 && mcuCount % restartInterval == 0)
                 {
                     if (br.HitRestart)
@@ -89,7 +87,9 @@ public partial class Decoder(ByteReaderViewModel brvm, LoggerViewModel logger, C
                 RenderMCU(mcuData, mcuX, mcuY, maxH, maxV);
                 mcuCount++;
 
-                await Task.Delay(10);
+                brvm.AlternateColor();
+
+                await Task.Delay(20);
             }
         }
 
