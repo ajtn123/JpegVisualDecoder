@@ -1,8 +1,0 @@
-{
-  "profiles": {
-    "JpegVisualDecoder": {
-      "commandName": "Project",
-      "commandLineArgs": "\"C:\\Users\\chenf\\source\\TestMaterial\\bike-d-c-0.5.jpg\""
-    }
-  }
-}
